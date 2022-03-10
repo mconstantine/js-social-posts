@@ -73,17 +73,37 @@ function postToHTMLElement(post) {
   const { id, content, media, author, likes, created } = post;
   const { name: authorName, image: authorImage } = author;
   const italianCreatedDate = usaToItalianDate(created);
+  let imageElement;
+
+  if (authorImage) {
+    imageElement = `<img class="profile-pic" src="${authorImage}" alt="${authorName}"></img>`;
+  } else {
+    const initials = authorName
+      .split(" ")
+      .map((word) => word.charAt(0))
+      .join("")
+      .toUpperCase();
+
+    imageElement = `
+      <div class="profile-pic-default">
+        <span>
+          ${initials}
+        </span>
+      </div>
+    `;
+  }
 
   const postElement = document.createElement("div");
 
   postElement.classList.add("post");
   // postElement.setAttribute("data-postid", id);
   postElement.dataset.postid = id;
+
   postElement.innerHTML = `
     <div class="post__header">
       <div class="post-meta">
         <div class="post-meta__icon">
-          <img class="profile-pic" src="${authorImage}" alt="${authorName}">
+          ${imageElement}
         </div>
         <div class="post-meta__data">
           <div class="post-meta__author">${authorName}</div>
