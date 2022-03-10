@@ -73,25 +73,7 @@ function postToHTMLElement(post) {
   const { id, content, media, author, likes, created } = post;
   const { name: authorName, image: authorImage } = author;
   const italianCreatedDate = usaToItalianDate(created);
-  let imageElement;
-
-  if (authorImage) {
-    imageElement = `<img class="profile-pic" src="${authorImage}" alt="${authorName}"></img>`;
-  } else {
-    const initials = authorName
-      .split(" ")
-      .map((word) => word.charAt(0))
-      .join("")
-      .toUpperCase();
-
-    imageElement = `
-      <div class="profile-pic-default">
-        <span>
-          ${initials}
-        </span>
-      </div>
-    `;
-  }
+  const imageElement = handleAuthorImageElement(authorImage, authorName);
 
   const postElement = document.createElement("div");
 
@@ -160,4 +142,24 @@ function toggleButtonState(buttonElement, likesCountElement, postObject) {
 
   const newLikesCount = postObject.likes;
   likesCountElement.innerHTML = newLikesCount;
+}
+
+function handleAuthorImageElement(authorImage, authorName) {
+  if (authorImage) {
+    return `<img class="profile-pic" src="${authorImage}" alt="${authorName}"></img>`;
+  } else {
+    const initials = authorName
+      .split(" ")
+      .map((word) => word.charAt(0))
+      .join("")
+      .toUpperCase();
+
+    return `
+      <div class="profile-pic-default">
+        <span>
+          ${initials}
+        </span>
+      </div>
+    `;
+  }
 }
